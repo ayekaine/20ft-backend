@@ -1,0 +1,71 @@
+{
+  "kind": "collectionType",
+  "collectionName": "cloudcasts",
+  "info": {
+    "singularName": "cloudcast",
+    "pluralName": "cloudcasts",
+    "displayName": "Cloudcasts",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "key": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "name": {
+      "type": "text"
+    },
+    "created_time": {
+      "type": "datetime"
+    },
+    "updated_time": {
+      "type": "datetime"
+    },
+    "play_count": {
+      "type": "integer"
+    },
+    "favorite_count": {
+      "type": "integer"
+    },
+    "comment_count": {
+      "type": "integer"
+    },
+    "listener_count": {
+      "type": "integer"
+    },
+    "repost_count": {
+      "type": "integer"
+    },
+    "slug": {
+      "type": "string"
+    },
+    "audio_length": {
+      "type": "integer"
+    },
+    "pictures": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "artist_id": {
+      "type": "integer"
+    },
+    "artist": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::artist.artist"
+    }
+  }
+}

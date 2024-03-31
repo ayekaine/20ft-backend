@@ -788,6 +788,152 @@ export interface PluginI18NLocale extends Schema.CollectionType {
   };
 }
 
+export interface ApiArtistArtist extends Schema.CollectionType {
+  collectionName: 'artists';
+  info: {
+    singularName: 'artist';
+    pluralName: 'artists';
+    displayName: 'Artists';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String;
+    biography: Attribute.Text;
+    profile_picture: Attribute.Media;
+    showcases: Attribute.Relation<
+      'api::artist.artist',
+      'manyToMany',
+      'api::showcase.showcase'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::artist.artist',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::artist.artist',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiCloudcastCloudcast extends Schema.CollectionType {
+  collectionName: 'cloudcasts';
+  info: {
+    singularName: 'cloudcast';
+    pluralName: 'cloudcasts';
+    displayName: 'Cloudcasts';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    key: Attribute.String;
+    url: Attribute.String;
+    name: Attribute.Text;
+    created_time: Attribute.DateTime;
+    updated_time: Attribute.DateTime;
+    play_count: Attribute.Integer;
+    favorite_count: Attribute.Integer;
+    comment_count: Attribute.Integer;
+    listener_count: Attribute.Integer;
+    repost_count: Attribute.Integer;
+    slug: Attribute.String;
+    audio_length: Attribute.Integer;
+    pictures: Attribute.Media;
+    artist_id: Attribute.Integer;
+    artist: Attribute.Relation<
+      'api::cloudcast.cloudcast',
+      'oneToOne',
+      'api::artist.artist'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::cloudcast.cloudcast',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::cloudcast.cloudcast',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiShowcaseShowcase extends Schema.CollectionType {
+  collectionName: 'showcases';
+  info: {
+    singularName: 'showcase';
+    pluralName: 'showcases';
+    displayName: 'Showcases';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String;
+    description: Attribute.Text;
+    artwork: Attribute.Media;
+    artists: Attribute.Relation<
+      'api::showcase.showcase',
+      'manyToMany',
+      'api::artist.artist'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::showcase.showcase',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::showcase.showcase',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiTagTag extends Schema.CollectionType {
+  collectionName: 'tags';
+  info: {
+    singularName: 'tag';
+    pluralName: 'tags';
+    displayName: 'Tags';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::tag.tag', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::tag.tag', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -806,6 +952,10 @@ declare module '@strapi/types' {
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'plugin::i18n.locale': PluginI18NLocale;
+      'api::artist.artist': ApiArtistArtist;
+      'api::cloudcast.cloudcast': ApiCloudcastCloudcast;
+      'api::showcase.showcase': ApiShowcaseShowcase;
+      'api::tag.tag': ApiTagTag;
     }
   }
 }
