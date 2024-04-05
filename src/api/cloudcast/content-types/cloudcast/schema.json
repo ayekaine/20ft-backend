@@ -48,17 +48,6 @@
     "audio_length": {
       "type": "integer"
     },
-    "pictures": {
-      "type": "media",
-      "multiple": true,
-      "required": false,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ]
-    },
     "artist_id": {
       "type": "integer"
     },
@@ -66,6 +55,15 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::artist.artist"
+    },
+    "pictures": {
+      "type": "json"
+    },
+    "tags": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::tag.tag",
+      "mappedBy": "cloudcasts"
     }
   }
 }
