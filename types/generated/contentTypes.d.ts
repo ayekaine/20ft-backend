@@ -850,13 +850,14 @@ export interface ApiCloudcastCloudcast extends Schema.CollectionType {
     repost_count: Attribute.Integer;
     slug: Attribute.String;
     audio_length: Attribute.Integer;
-    pictures: Attribute.Media;
     artist_id: Attribute.Integer;
     artist: Attribute.Relation<
       'api::cloudcast.cloudcast',
       'oneToOne',
       'api::artist.artist'
     >;
+    pictures: Attribute.JSON;
+    user: Attribute.JSON;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

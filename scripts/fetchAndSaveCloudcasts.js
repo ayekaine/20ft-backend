@@ -1,4 +1,5 @@
 // TODO: adjust the script to fetch cloudcasts from the previous summer (or anytime needed)
+// TODO: populate tags into cloudcasts related table
 
 require("dotenv").config(); // Load variables from .env file
 
@@ -21,19 +22,21 @@ async function fetchCloudcasts() {
 }
 
 async function saveCloudcastToStrapi(cloudcast) {
+  // console.log(cloudcast);
   const cloudcastData = {
-    title: cloudcast.name,
+    key: cloudcast.key,
+    name: cloudcast.name,
     url: cloudcast.url,
-    created_at: cloudcast.created_time,
-    updated_at: cloudcast.updated_time,
+    created_time: cloudcast.created_time,
+    updated_time: cloudcast.updated_time,
     play_count: cloudcast.play_count,
     favorite_count: cloudcast.favorite_count,
     comment_count: cloudcast.comment_count,
     listener_count: cloudcast.listener_count,
     repost_count: cloudcast.repost_count,
-    pictures: cloudcast.pictures,
+    pictures: {...cloudcast.pictures},
     slug: cloudcast.slug,
-    user: cloudcast.user,
+    user: {...cloudcast.user},
     audio_length: cloudcast.audio_length,
   };
 
