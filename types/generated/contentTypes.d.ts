@@ -858,6 +858,11 @@ export interface ApiCloudcastCloudcast extends Schema.CollectionType {
     >;
     pictures: Attribute.JSON;
     user: Attribute.JSON;
+    tags: Attribute.Relation<
+      'api::cloudcast.cloudcast',
+      'manyToMany',
+      'api::tag.tag'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -919,12 +924,20 @@ export interface ApiTagTag extends Schema.CollectionType {
     singularName: 'tag';
     pluralName: 'tags';
     displayName: 'Tags';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
     name: Attribute.String;
+    key: Attribute.String;
+    url: Attribute.String;
+    cloudcasts: Attribute.Relation<
+      'api::tag.tag',
+      'manyToMany',
+      'api::cloudcast.cloudcast'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

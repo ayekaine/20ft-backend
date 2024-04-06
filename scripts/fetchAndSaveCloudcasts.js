@@ -2,9 +2,7 @@
 // TODO: populate tags into cloudcasts related table
 
 require("dotenv").config(); // Load variables from .env file
-
 const fetch = require("node-fetch");
-
 const MIXCLOUD_API_URL = "https://api.mixcloud.com/20ftradio/cloudcasts/";
 const STRAPI_API_URL = "http://localhost:1337/api/cloudcasts"; // Update this URL based on your Strapi instance
 const API_TOKEN = process.env.API_TOKEN;
@@ -22,7 +20,41 @@ async function fetchCloudcasts() {
 }
 
 async function saveCloudcastToStrapi(cloudcast) {
-  // console.log(cloudcast);
+  console.log(cloudcast);
+ // First, process tags
+ const tagIds = await Promise.all(cloudcast.tags.map(async (tag) => {
+  // Check if the tag exists
+  const tagResponse = await fetch(`http://localhost:1337/api/tags?filters[name][$eq]=${encodeURIComponent(tag.name)}`, {
+    headers: {
+      Authorization: `Bearer ${API_TOKEN}`,
+    },
+  });
+  const tagData = await tagResponse.json();
+
+  // If the tag doesn't exist, create it
+  if (tagData.data.length === 0) {
+    const createTagResponse = await fetch(`http://localhost:1337/api/tags`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${API_TOKEN}`,
+      },
+      body: JSON.stringify({
+        data: {
+          name: tag.name,
+          key: tag.key,
+          url: tag.url,
+        },
+      }),
+    });
+    const createdTag = await createTagResponse.json();
+    return createdTag.data.id;
+  } else {
+    // If it exists, return the existing ID
+    return tagData.data[0].id;
+  }
+}));
+
   const cloudcastData = {
     key: cloudcast.key,
     name: cloudcast.name,
@@ -39,6 +71,13 @@ async function saveCloudcastToStrapi(cloudcast) {
     user: {...cloudcast.user},
     audio_length: cloudcast.audio_length,
   };
+
+    // Cloudcast data adjusted to include tag relationships
+    const cloudcastDataWithTags = {
+      ...cloudcastData,
+      // Add the relationships section
+      tags: tagIds.map(tagId => ({ id: tagId })),
+    };
 
   try {
     // Check for existing cloudcast by slug
@@ -60,7 +99,7 @@ async function saveCloudcastToStrapi(cloudcast) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${API_TOKEN}`,
         },
-        body: JSON.stringify({ data: cloudcastData }),
+        body: JSON.stringify({ data: cloudcastDataWithTags }),
       });
 
       if (response.ok) {
