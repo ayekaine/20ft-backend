@@ -1,22 +1,17 @@
-require("dotenv").config(); // Load variables from .env file
-const fetch = require("node-fetch");
-const API_TOKEN = process.env.API_TOKEN;
-
+const httpRequest = require('./helpers/httpRequest');
 
 async function fetchCloudcastsByTag(tagName) {
-    const response = await fetch(`http://localhost:1337/api/cloudcasts?filters[tags][name][$eq]=${encodeURIComponent(tagName)}&populate=tags`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${API_TOKEN}`,
-        'Content-Type': 'application/json',
-      },
-    });
-    const data = await response.json();
-    return data;
-  }
-  
-  // Example usage:
-  fetchCloudcastsByTag('Trance')
+    const url = `http://localhost:1337/api/cloudcasts?filters[tags][name][$eq]=${encodeURIComponent(tagName)}&populate=tags`;
+    const method = 'GET';
+    try {
+        const data = await httpRequest(url, method);
+        return data;
+    } catch (error) {
+        throw new Error(`Error fetching cloudcasts by tag: ${error.message}`);
+    }
+}
+
+// Example usage:
+fetchCloudcastsByTag('Trance')
     .then(data => console.log(data))
-    .catch(error => console.error('Error fetching cloudcasts by tag:', error));
-  
+    .catch(error => console.error(error.message));
