@@ -1,11 +1,16 @@
-// TODO: adjust the script to fetch cloudcasts from the previous summer (or anytime needed)
+// TODO: add retries in case of ETIMEDOUT
 
 const httpRequest = require("./helpers/httpRequest");
 
 const MIXCLOUD_API_URL = "https://api.mixcloud.com/20ftradio/cloudcasts/";
 const STRAPI_API_URL = "http://localhost:1337/api/cloudcasts"; // Update this URL based on your Strapi instance
 
-async function fetchCloudcasts(startDate, endDate, nextUrl = null) {
+async function fetchCloudcasts(
+  startDate,
+  endDate,
+  nextUrl = null,
+  retries = 0
+) {
   let url = nextUrl || MIXCLOUD_API_URL + "?limit=20"; // Set a default limit
 
   if (startDate && !nextUrl) {
@@ -30,11 +35,17 @@ async function fetchCloudcasts(startDate, endDate, nextUrl = null) {
       nextUrl: data?.paging?.next || null,
     };
   } catch (error) {
-    console.error(
-      "Failed to fetch a page of data from Mixcloud:",
-      error.message
-    );
-    return { cloudcasts: [], nextUrl: null }; // Return empty results on error
+    if (retries < 3 && error.message.includes("ETIMEDOUT")) {
+      // Adjust max retries as needed
+      console.error(
+        `Fetch attempt ${retries + 1} failed: ${error.message}. Retrying...`
+      );
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 1 second before retrying
+      return fetchCloudcasts(startDate, endDate, nextUrl, retries + 1);
+    } else {
+      console.error("Failed to fetch data after retries:", error.message);
+      return { cloudcasts: [], nextUrl: null };
+    }
   }
 }
 
