@@ -4,7 +4,8 @@
   "info": {
     "singularName": "tag",
     "pluralName": "tags",
-    "displayName": "Tags"
+    "displayName": "Tags",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -13,6 +14,18 @@
   "attributes": {
     "name": {
       "type": "string"
+    },
+    "key": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "cloudcasts": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::cloudcast.cloudcast",
+      "inversedBy": "tags"
     }
   }
 }
