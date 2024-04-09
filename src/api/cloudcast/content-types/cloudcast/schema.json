@@ -33,15 +33,6 @@
     "favorite_count": {
       "type": "integer"
     },
-    "comment_count": {
-      "type": "integer"
-    },
-    "listener_count": {
-      "type": "integer"
-    },
-    "repost_count": {
-      "type": "integer"
-    },
     "slug": {
       "type": "string"
     },
@@ -64,6 +55,16 @@
       "relation": "manyToMany",
       "target": "api::tag.tag",
       "mappedBy": "cloudcasts"
+    },
+    "audio": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
     }
   }
 }

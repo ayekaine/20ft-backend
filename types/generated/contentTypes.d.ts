@@ -845,9 +845,6 @@ export interface ApiCloudcastCloudcast extends Schema.CollectionType {
     updated_time: Attribute.DateTime;
     play_count: Attribute.Integer;
     favorite_count: Attribute.Integer;
-    comment_count: Attribute.Integer;
-    listener_count: Attribute.Integer;
-    repost_count: Attribute.Integer;
     slug: Attribute.String;
     audio_length: Attribute.Integer;
     artist_id: Attribute.Integer;
@@ -862,6 +859,7 @@ export interface ApiCloudcastCloudcast extends Schema.CollectionType {
       'manyToMany',
       'api::tag.tag'
     >;
+    audio: Attribute.Media;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
